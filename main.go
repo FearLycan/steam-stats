@@ -11,7 +11,7 @@ import (
 
 func main() {
 
-	STEAM_ID := "#"
+	STEAM_ID := "76561198087405678"
 
 	KEY := "#"
 
@@ -45,7 +45,7 @@ func main() {
 
 
 
-	fmt.Printf("Hello %s!\n", response.Response.Players[0].Name)
-	fmt.Printf("Last seen on Steam: %s (%d days ago) \n", response.Response.Players[0].lastSeen(), response.Response.Players[0].dayAgo())
-	fmt.Printf("Status: %s \n", response.Response.Players[0].getStatusName())
+	fmt.Printf("Hello %s!\n", response)
+	//fmt.Printf("Last seen on Steam: %s (%d days ago) \n", response.Response.Players[0].lastSeen(), response.Response.Players[0].dayAgo())
+	//fmt.Printf("Status: %s \n", response.Response.Players[0].getStatusName())
 }
