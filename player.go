@@ -14,14 +14,16 @@ const STATUS_READY_TO_PLAY = 6
 
 // Response ...
 type Response struct {
-	Players []Person `json:"players"`
+	Body struct {
+		Players []Person `json:"players"`
+	} `json:"response"`
 }
 
 // Person ...
 type Person struct {
-	Name        string   `json:"personaname"`
-	LastLogoff  int64    `json:"lastlogoff"`
-	PersonState byte     `json:"personastate"`
+	Name        string `json:"personaname"`
+	LastLogoff  int64  `json:"lastlogoff"`
+	PersonState byte   `json:"personastate"`
 }
 
 func (p *Person) lastSeen() string {
