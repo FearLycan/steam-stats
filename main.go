@@ -6,16 +6,18 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
 func main() {
 
-	STEAM_ID := "76561198087405678"
+	var (
+		STEAM_ID  string = os.Getenv("STEAM_ID")
+		STEAM_KEY string = os.Getenv("STEAM_KEY")
+	)
 
-	KEY := "#"
-
-	url := fmt.Sprintf("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s", KEY, STEAM_ID)
+	url := fmt.Sprintf("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s", STEAM_KEY, STEAM_ID)
 
 	spaceClient := http.Client{
 		Timeout: time.Second * 2, // Maximum of 2 secs
