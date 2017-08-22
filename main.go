@@ -1,12 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
-	"io/ioutil"
-	"encoding/json"
 )
 
 func main() {
@@ -23,29 +23,27 @@ func main() {
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("could not establish new request: ", err)
 	}
 
-	res, getErr := spaceClient.Do(req)
-	if getErr != nil {
-		log.Fatal(getErr)
+	res, err := spaceClient.Do(req)
+	if err != nil {
+		log.Fatal("could not execute new request: ", err)
 	}
 
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		log.Fatal(readErr)
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal("could not read the body: ", err)
 	}
 
 	response := Response{}
 
-	jsonErr := json.Unmarshal(body, &response)
-	if jsonErr != nil {
-		log.Fatal(jsonErr)
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		log.Fatal("could not unmarshal json: ", err)
 	}
 
-
-
-	fmt.Printf("Hello %s!\n", response)
+	fmt.Printf("Hello %#v!\n", response)
 	//fmt.Printf("Last seen on Steam: %s (%d days ago) \n", response.Response.Players[0].lastSeen(), response.Response.Players[0].dayAgo())
 	//fmt.Printf("Status: %s \n", response.Response.Players[0].getStatusName())
 }
