@@ -12,12 +12,14 @@ const STATUS_SNOOZE = 4
 const STATUS_READY_TO_TRADE = 5
 const STATUS_READY_TO_PLAY = 6
 
+
 // Response ...
-type Response struct {
+type PlayerResponse struct {
 	Body struct {
 		Players []Person `json:"players"`
 	} `json:"response"`
 }
+
 
 // Person ...
 type Person struct {
