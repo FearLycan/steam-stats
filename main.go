@@ -5,9 +5,10 @@ import (
 	"os"
 	"runtime"
 	"os/exec"
+	"bufio"
 )
 
-const EXIT = 10
+const MENU_EXIT = 10
 
 func main() {
 
@@ -18,46 +19,52 @@ func main() {
 
 	url := fmt.Sprintf("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=%s&steamids=%s", STEAM_KEY, STEAM_ID)
 
-	steam := Steam{url, "player"}
+	steam := Steam{url}
 
 	playerResponse := steam.getPlayerResponse()
 
 	n := 0
 	clearScreen();
-	for n != EXIT {
+	for n != MENU_EXIT {
 
 		menu(playerResponse);
 		fmt.Print("Enter: ")
 		fmt.Scanf("%d", &n)
+
 		clearScreen();
-
-
 		switch n {
 		case 1:
-			fmt.Println("1!!")
+			fmt.Printf("===== Recently Played Games by %s ===== \n", playerResponse.Body.Players[0].Name)
+
+			url = fmt.Sprintf("http://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=%s&steamid=%s&format=json", STEAM_KEY, STEAM_ID)
+
+			steam = Steam{url}
+
+			recentlyPlayedGames := steam.getRecentlyPlayedGames()
+
+			for i, game := range recentlyPlayedGames.Body.Games {
+				fmt.Printf("%d. %s\t played by %d\n", i, game.Name, game.Playtime2weeks)
+			}
+
+			fmt.Print("\nPress 'Enter' to continue...")
+			bufio.NewReader(os.Stdin).ReadBytes('\n')
+
 		default:
 			fmt.Println("What You Wanna Do?")
 		}
 
 		clearScreen();
-
 	}
-
-	//menu(playerResponse);
-
-	//fmt.Printf("Hello %#v!\n", response.Body.Players[0].Name)
-	//fmt.Printf("Last seen on Steam: %s (%d days ago) \n", response.Body.Players[0].lastSeen(), response.Body.Players[0].dayAgo())
-	//fmt.Printf("Status: %s \n", response.Body.Players[0].getStatusName())
 
 }
 
 func menu(response PlayerResponse) {
-	fmt.Println(response.Body.Players[0].Name, " - ", response.Body.Players[0].getStatusName())
+	fmt.Println(response.Body.Players[0].Name, " 			Status: ", response.Body.Players[0].getStatusName())
 	fmt.Println("=================================================")
-	fmt.Printf("%d. \n", 1)
+	fmt.Printf("%d. Recently Played Games \n", 1)
 	fmt.Printf("%d. \n", 2)
 	fmt.Printf("%d. \n", 3)
-	fmt.Printf("%d. Exit \n", EXIT)
+	fmt.Printf("%d. Exit \n", MENU_EXIT)
 	fmt.Println("=================================================")
 }
 
